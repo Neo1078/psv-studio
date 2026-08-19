@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PSV Studio — Sites &amp; Systems, Built to Last</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0D10;
+    --ink-2:#12151A;
+    --blueprint:#006BB6;
+    --signal:#F58426;
+    --gold:#C9A227;
+    --paper:#EDEBE3;
+    --slate:#8892A0;
+    --line:rgba(237,235,227,0.14);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'Inter',sans-serif;
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--signal); color:var(--ink);}
+
+  h1,h2,h3{font-family:'Archivo Black', sans-serif; text-transform:uppercase; letter-spacing:-0.01em;}
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--signal);
+    display:flex; align-items:center; gap:0.6rem;
+  }
+  .eyebrow::before{content:''; width:20px; height:1px; background:var(--signal);}
+
+  a{color:inherit;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 6vw;}
+
+  /* NAV */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:1.4rem 6vw;
+    background:linear-gradient(to bottom, rgba(11,13,16,0.92), transparent);
+    backdrop-filter:blur(2px);
+  }
+  .logo{font-family:'Archivo Black'; font-size:1.05rem; letter-spacing:0.02em;}
+  .logo span{color:var(--signal);}
+  nav .links{display:flex; gap:2rem; font-family:'IBM Plex Mono'; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.06em;}
+  nav .links a{text-decoration:none; color:var(--slate); transition:color 0.2s;}
+  nav .links a:hover{color:var(--paper);}
+  @media (max-width:760px){ nav .links{display:none;} }
+
+  /* HERO with blueprint-to-skyline canvas */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex; flex-direction:column; justify-content:center;
+    padding-top:6rem;
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+  }
+  #blueprint-canvas{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    opacity:0.9;
+  }
+  .hero-content{position:relative; z-index:2;}
+  .hero h1{
+    font-size:clamp(2.6rem, 7vw, 5.4rem);
+    line-height:0.98;
+    max-width:14ch;
+    margin:1.4rem 0 1.6rem;
+  }
+  .hero h1 em{font-style:normal; color:var(--signal);}
+  .hero p.sub{
+    max-width:46ch;
+    color:var(--slate);
+    font-size:1.05rem;
+    margin-bottom:2.2rem;
+  }
+  .cta-row{display:flex; gap:1rem; flex-wrap:wrap;}
+  .btn{
+    font-family:'IBM Plex Mono'; font-size:0.82rem; text-transform:uppercase; letter-spacing:0.06em;
+    padding:0.95rem 1.6rem;
+    border:1px solid var(--paper);
+    text-decoration:none;
+    display:inline-flex; align-items:center; gap:0.5rem;
+    transition:all 0.2s;
+  }
+  .btn-solid{background:var(--signal); border-color:var(--signal); color:var(--ink); font-weight:600;}
+  .btn-solid:hover{background:var(--paper); border-color:var(--paper);}
+  .btn-ghost:hover{background:var(--paper); color:var(--ink);}
+
+  .scroll-cue{
+    position:absolute; bottom:2rem; left:6vw; z-index:2;
+    font-family:'IBM Plex Mono'; font-size:0.7rem; color:var(--slate);
+    display:flex; align-items:center; gap:0.5rem; letter-spacing:0.08em;
+  }
+  .scroll-cue .tick{width:1px; height:24px; background:var(--slate); animation:tick 1.8s ease-in-out infinite;}
+  @keyframes tick{ 0%,100%{transform:scaleY(1); opacity:0.4;} 50%{transform:scaleY(1.4); opacity:1;} }
+
+  /* SECTION SHELL */
+  section{padding:7rem 0; border-bottom:1px solid var(--line); position:relative;}
+  .section-head{margin-bottom:3.2rem; max-width:56ch;}
+  .section-head h2{font-size:clamp(1.8rem, 4vw, 2.6rem); margin-top:0.8rem;}
+  .section-head p{color:var(--slate); margin-top:1rem; font-size:1rem;}
+
+  /* PHASES (services) — genuinely sequential build phases */
+  .phases{display:flex; flex-direction:column; border-top:1px solid var(--line);}
+  .phase{
+    display:grid;
+    grid-template-columns:100px 1fr 220px;
+    gap:2rem;
+    padding:2.4rem 0;
+    border-bottom:1px solid var(--line);
+    align-items:start;
+    position:relative;
+  }
+  .phase:hover{background:rgba(237,235,227,0.02);}
+  .phase-tag{font-family:'IBM Plex Mono'; color:var(--blueprint); font-size:0.8rem; letter-spacing:0.05em; padding-top:0.3rem;}
+  .phase h3{font-size:1.5rem; margin-bottom:0.7rem; text-transform:none; font-family:'Archivo Black';}
+  .phase p{color:var(--slate); max-width:52ch; font-size:0.95rem;}
+  .phase-price{text-align:right; font-family:'IBM Plex Mono'; color:var(--paper);}
+  .phase-price .amt{font-size:1.3rem; color:var(--signal); display:block; margin-bottom:0.3rem;}
+  .phase-price .unit{color:var(--slate); font-size:0.72rem; text-transform:uppercase;}
+  @media (max-width:760px){
+    .phase{grid-template-columns:1fr; gap:0.8rem;}
+    .phase-price{text-align:left;}
+  }
+
+  /* SPEC SHEET / dimension line note under phases */
+  .spec-note{
+    margin-top:2rem; padding:1.4rem 1.6rem;
+    border:1px dashed var(--line);
+    font-family:'IBM Plex Mono'; font-size:0.82rem; color:var(--slate);
+    display:flex; gap:0.8rem; align-items:flex-start;
+  }
+  .spec-note::before{content:'△'; color:var(--gold);}
+
+  /* PROOF OF WORK */
+  .proof-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:1.5px; background:var(--line); border:1px solid var(--line);}
+  .proof-card{background:var(--ink); padding:2.2rem 1.8rem; min-height:220px; display:flex; flex-direction:column; justify-content:space-between;}
+  .proof-card .mono{color:var(--blueprint); font-size:0.72rem; letter-spacing:0.08em;}
+  .proof-card h3{font-size:1.15rem; margin:0.9rem 0 0.7rem; text-transform:none; font-family:'Archivo Black'; line-height:1.2;}
+  .proof-card p{color:var(--slate); font-size:0.88rem;}
+  .proof-card a.tag{
+    margin-top:1.2rem; font-family:'IBM Plex Mono'; font-size:0.74rem; color:var(--signal);
+    text-decoration:none; display:inline-flex; align-items:center; gap:0.4rem;
+  }
+  @media (max-width:900px){ .proof-grid{grid-template-columns:1fr;} }
+
+  /* ABOUT */
+  .about-grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:4rem; align-items:start;}
+  .about-grid p{color:var(--slate); font-size:1rem; margin-bottom:1.2rem; max-width:52ch;}
+  .credentials{border-left:2px solid var(--blueprint); padding-left:1.4rem;}
+  .credentials .row{margin-bottom:1.4rem;}
+  .credentials .row .k{font-family:'IBM Plex Mono'; font-size:0.72rem; color:var(--slate); text-transform:uppercase; letter-spacing:0.06em;}
+  .credentials .row .v{font-size:1rem; margin-top:0.25rem;}
+  @media (max-width:800px){ .about-grid{grid-template-columns:1fr;} }
+
+  /* CONTACT */
+  .contact{text-align:left;}
+  .contact h2{font-size:clamp(2rem,6vw,3.6rem); max-width:16ch; margin-bottom:1.6rem;}
+  .contact-links{display:flex; flex-wrap:wrap; gap:1.2rem 2.4rem; margin-top:2.4rem; font-family:'IBM Plex Mono'; font-size:0.9rem;}
+  .contact-links a{text-decoration:none; border-bottom:1px solid var(--line); padding-bottom:0.2rem; transition:border-color 0.2s, color 0.2s;}
+  .contact-links a:hover{border-color:var(--signal); color:var(--signal);}
+
+  footer{
+    padding:2.4rem 6vw;
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:'IBM Plex Mono'; font-size:0.75rem; color:var(--slate);
+    flex-wrap:wrap; gap:0.8rem;
+  }
+  footer .sign{color:var(--gold);}
+
+  @media (prefers-reduced-motion: reduce){
+    .scroll-cue .tick{animation:none;}
+    #blueprint-canvas{opacity:0.5;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">PSV<span>·</span>STUDIO</div>
+  <div class="links">
+    <a href="#phases">Services</a>
+    <a href="#proof">Proof</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <canvas id="blueprint-canvas"></canvas>
+  <div class="wrap hero-content">
+    <div class="eyebrow">Brooklyn — Design &amp; Development</div>
+    <h1>The city rebuilds itself.<br><em>So does your business.</em></h1>
+    <p class="sub">Sites, launch content, and small-business systems built by a Brooklyn designer-developer who also does the branding, the flyer, and the rollout — not just the code.</p>
+    <div class="cta-row">
+      <a href="#phases" class="btn btn-solid">See the build phases</a>
+      <a href="#contact" class="btn btn-ghost">Start a project</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><span class="tick"></span> SCROLL — 01 / SPEC</div>
+</section>
+
+<section id="phases">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Build Phases</div>
+      <h2>Every project moves in the same three phases a building does.</h2>
+      <p>Pick the phase you need, or run all three back to back — foundation, structure, finish-out.</p>
+    </div>
+
+    <div class="phases">
+      <div class="phase">
+        <div class="phase-tag mono">PHASE 01</div>
+        <div>
+          <h3>Foundation — Landing &amp; Portfolio Sites</h3>
+          <p>A single, cinematic one-page site: hero, case cards, contact block wired to your handles. Built the same way NEO YORK was — hand-coded, fast, no bloated site builder.</p>
+        </div>
+        <div class="phase-price">
+          <span class="amt">$600–$1,200</span>
+          <span class="unit">per site</span>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-tag mono">PHASE 02</div>
+        <div>
+          <h3>Structure — Design + Dev Launch Bundle</h3>
+          <p>Site build plus a matching launch content pack: 3–5 branded social assets (carousel or flyer style) so the site doesn't launch into silence.</p>
+        </div>
+        <div class="phase-price">
+          <span class="amt">$1,000–$1,800</span>
+          <span class="unit">per bundle</span>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-tag mono">PHASE 03</div>
+        <div>
+          <h3>Finish-Out — Monthly Upkeep</h3>
+          <p>Hosting checks, content swaps, and small updates so the site stays current without you touching code.</p>
+        </div>
+        <div class="phase-price">
+          <span class="amt">$150–$300</span>
+          <span class="unit">per month</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-note">Most first-time clients start at Phase 01 or 02. Phase 03 opens up once a site is live.</div>
+  </div>
+</section>
+
+<section id="proof">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Proof of Work</div>
+      <h2>Already built, already live.</h2>
+      <p>Recent work across sites, print, and community content.</p>
+    </div>
+
+    <div class="proof-grid">
+      <div class="proof-card">
+        <div class="mono">SITE</div>
+        <div>
+          <h3>NEO YORK Portfolio</h3>
+          <p>Cinematic anime-inspired one-page site, Knicks colorway, hand-built and deployed.</p>
+        </div>
+        <a class="tag" href="https://neo1078.github.io/Neo-York/" target="_blank" rel="noopener">neo1078.github.io/Neo-York →</a>
+      </div>
+      <div class="proof-card">
+        <div class="mono">PRINT</div>
+        <div>
+          <h3>Clautilda's Curry-Q Flyer</h3>
+          <p>Print-ready event flyer, hand-coded vector illustration, first annual Brooklyn event.</p>
+        </div>
+        <a class="tag" href="#contact">Ask to see it →</a>
+      </div>
+      <div class="proof-card">
+        <div class="mono">COMMUNITY</div>
+        <div>
+          <h3>Enough Initiative Content</h3>
+          <p>Peace-movement social content and campaign captions for the Credible Messengers community.</p>
+        </div>
+        <a class="tag" href="#contact">Ask to see it →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap about-grid">
+    <div>
+      <div class="eyebrow">Who's Building</div>
+      <h2 style="font-size:clamp(1.8rem,4vw,2.6rem); margin:0.8rem 0 1.4rem;">Neo — Professor Stone Visuals</h2>
+      <p>Brooklyn-based visual artist, motion designer, and hip-hop culture educator. NEO YORK — the brand name — is Neo (the name), New York (the city), and Neo Tokyo from Akira, the city that rebuilds itself. That throughline runs through everything built here: sites, flyers, and content that hold up under real use.</p>
+      <p>Rooted in Caribbean culture and community peace work with the Enough Initiative and Credible Messengers. Every build carries that same care for craft and community.</p>
+    </div>
+    <div class="credentials">
+      <div class="row"><div class="k">Based</div><div class="v">Brooklyn, NY</div></div>
+      <div class="row"><div class="k">Stack</div><div class="v">Hand-coded HTML/CSS/JS, GitHub Pages deploy</div></div>
+      <div class="row"><div class="k">Also does</div><div class="v">Branded graphics, print, motion content</div></div>
+      <div class="row"><div class="k">Community</div><div class="v">Enough Initiative · Credible Messengers</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap contact">
+    <div class="eyebrow">Start Here</div>
+    <h2>Tell me what you're building, and I'll spec the phases.</h2>
+    <a href="mailto:shihylton@gmail.com" class="btn btn-solid">shihylton@gmail.com</a>
+    <div class="contact-links">
+      <a href="https://instagram.com/professor_stonevisuals" target="_blank" rel="noopener">@professor_stonevisuals</a>
+      <a href="https://tiktok.com/@neo1law" target="_blank" rel="noopener">@neo1law</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>© 2026 PSV Studio</div>
+  <div class="sign">The city's in the bio.</div>
+</footer>
+
+<script>
+// Blueprint-to-skyline draw-on animation: a city silhouette that constructs itself
+// from architectural linework, echoing the "city that rebuilds itself" brand thesis.
+const canvas = document.getElementById('blueprint-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, DPR;
+
+function resize(){
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  W = canvas.offsetWidth; H = canvas.offsetHeight;
+  canvas.width = W * DPR; canvas.height = H * DPR;
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Generate a simple NYC-ish skyline as a set of rectangles (buildings) with varying heights
+function makeSkyline(){
+  const buildings = [];
+  let x = 0;
+  const baseY = H * 0.86;
+  while(x < W){
+    const w = 34 + Math.random()*54;
+    const h = 60 + Math.random()* (H*0.5);
+    buildings.push({x, w, h, y: baseY - h, windows: Math.random() > 0.4});
+    x += w + (6 + Math.random()*10);
+  }
+  return buildings;
+}
+
+let buildings = makeSkyline();
+window.addEventListener('resize', () => { buildings = makeSkyline(); });
+
+let progress = 0; // 0 -> 1 draw-in
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  const lineColor = 'rgba(0,107,182,0.55)'; // blueprint blue
+  const fillColor = 'rgba(11,13,16,0.0)';
+  const gridColor = 'rgba(237,235,227,0.05)';
+
+  // faint blueprint grid
+  ctx.strokeStyle = gridColor;
+  ctx.lineWidth = 1;
+  const gap = 40;
+  for(let gx=0; gx<W; gx+=gap){ ctx.beginPath(); ctx.moveTo(gx,0); ctx.lineTo(gx,H); ctx.stroke(); }
+  for(let gy=0; gy<H; gy+=gap){ ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(W,gy); ctx.stroke(); }
+
+  const baseY = H * 0.86;
+  ctx.beginPath(); ctx.moveTo(0, baseY); ctx.lineTo(W, baseY);
+  ctx.strokeStyle = 'rgba(237,235,227,0.18)';
+  ctx.stroke();
+
+  buildings.forEach((b, i) => {
+    // stagger reveal based on progress
+    const reveal = Math.max(0, Math.min(1, (progress*1.3) - (i / buildings.length)*0.6));
+    if(reveal <= 0) return;
+    const h = b.h * reveal;
+    const y = baseY - h;
+
+    // structure line (blueprint outline)
+    ctx.strokeStyle = lineColor;
+    ctx.lineWidth = 1.2;
+    ctx.strokeRect(b.x, y, b.w, h);
+
+    // once mostly built, add a soft fill + windows for "finished" feel
+    if(reveal > 0.75){
+      ctx.fillStyle = 'rgba(0,107,182,0.06)';
+      ctx.fillRect(b.x, y, b.w, h);
+      if(b.windows){
+        ctx.fillStyle = 'rgba(245,132,38,0.35)';
+        const cols = Math.max(1, Math.floor(b.w/14));
+        const rows = Math.max(1, Math.floor(h/18));
+        for(let r=0;r<rows;r++){
+          for(let c=0;c<cols;c++){
+            if(Math.random() > 0.82){
+              ctx.fillRect(b.x + 5 + c*13, y + 8 + r*16, 5, 7);
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+function animate(){
+  if(progress < 1){
+    progress += reduceMotion ? 1 : 0.012;
+    draw();
+    requestAnimationFrame(animate);
+  } else {
+    draw();
+  }
+}
+
+if(reduceMotion){ progress = 1; draw(); } else { animate(); }
+</script>
+
+</body>
+</html>
